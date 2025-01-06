@@ -1,6 +1,5 @@
 from datetime import datetime
 from app import db
-from app.models.tag import post_tags
 
 
 class Post(db.Model):
@@ -19,10 +18,6 @@ class Post(db.Model):
     # One-to-many relationship: each post can have many likes
     likes = db.relationship('Like', backref='post', lazy=True, cascade="all, delete-orphan")
 
-    # Many-to-many relationship: each post can have many tags
-    tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy=True))
-
     def __repr__(self):
         """Return a string representation of the post."""
         return f"Post('{self.title}', '{self.date_posted}')"
-

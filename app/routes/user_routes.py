@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models import User
+from app.models import User, Post
 from app import db
 from app.schemas.user_schema import user_schema
+from app.schemas.post_schema import posts_schema
 from marshmallow import ValidationError
 
 # Create a Blueprint for user routes
@@ -60,3 +61,16 @@ def update_profile():
         'data': user_schema.dump(user)
     }), 200
 
+@user.route('/profile/posts', methods=['GET'])
+@jwt_required()
+def get_user_posts():
+    user_id = get_jwt_identity()
+    user = User.query.get_or_404(user_id)
+
+    # Fetch all posts created by the user
+    posts = Post.query.filter_by(user_id=user_id).all()
+
+    return jsonify({
+        'message': 'User posts retrieved successfully',
+        'data': posts_schema.dump(posts)
+    }), 200

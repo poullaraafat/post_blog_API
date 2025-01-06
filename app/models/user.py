@@ -1,6 +1,6 @@
 from datetime import datetime
 from app import db
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
@@ -20,6 +20,10 @@ class User(db.Model):
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        """Check if the provided password matches the hashed password in the database."""
+        return check_password_hash(self.password, password)
 
     def __repr__(self):
         """Return a string representation of the user."""

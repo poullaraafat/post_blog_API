@@ -13,7 +13,7 @@ class PostSchema(Schema):
     # Nested fields
     comments = fields.Nested('CommentSchema', many=True,
                              only=('id', 'content', 'created_at'), dump_only=True)
-    tags = fields.Nested('TagSchema', many=True, only=('name'), dump_only=True)
+    tags = fields.Nested('TagSchema', many=True, only=('name',), dump_only=True)
     likes = fields.Method("get_likes_count", dump_only=True)
 
     def get_likes_count(self, post):

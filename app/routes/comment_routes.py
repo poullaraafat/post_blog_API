@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import Comment, Post, User
 from app import db
-from app.schemas.comment_schema import comment_schema
+from app.schemas.comment_schema import comment_schema, comments_schema
 from marshmallow import ValidationError
 
 # Create a Blueprint for comment routes
@@ -82,3 +82,16 @@ def delete_comment(comment_id):
     db.session.commit()
 
     return jsonify({'message': 'Comment deleted successfully'}), 200
+
+@comment.route('/posts/<int:post_id>/comments', methods=['GET'])
+def get_comments_for_post(post_id):
+    # Fetch the post to ensure it exists
+    post = Post.query.get_or_404(post_id)
+
+    # Fetch all comments associated with the post
+    comments = Comment.query.filter_by(post_id=post_id).all()
+
+    return jsonify({
+        'message': 'Comments retrieved successfully',
+        'data': comments_schema.dump(comments)
+    }), 200

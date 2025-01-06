@@ -1,7 +1,12 @@
+alembic==1.14.0
 Flask==2.2.3
-Flask-SQLAlchemy==3.0.2
 Flask-JWT-Extended==4.4.0
+Flask-Login==0.6.3
 Flask-Migrate==3.1.0
-Flask-Marshmallow==0.14.0
-werkzeug==2.2.3
+Flask-SQLAlchemy==3.0.2
+marshmallow==3.23.3
+packaging==24.2
+PyJWT==2.10.1
 python-dotenv==0.21.0
+SQLAlchemy==2.0.36
+Werkzeug==2.2.3
