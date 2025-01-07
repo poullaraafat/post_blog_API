@@ -1,3 +1,4 @@
 ._ven
 .env
-instance
+instance/
+__pycache__/
