@@ -25,7 +25,6 @@ class UserSchema(Schema):
             error="Password must be between 8 and 32 characters long."
         )
     )
-    profile_picture = fields.Str(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     posts = fields.Nested(
         'PostSchema', many=True,

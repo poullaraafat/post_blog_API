@@ -7,7 +7,6 @@ class PostSchema(Schema):
     title = fields.Str(required=True, error_messages={"required": "Title is required."})
     content = fields.Str(required=True, error_messages={"required": "Content is required."})
     date_posted = fields.DateTime(dump_only=True)
-    post_picture = fields.Str(dump_only=True)
     user_id = fields.Int(dump_only=True)
 
     # Nested fields
