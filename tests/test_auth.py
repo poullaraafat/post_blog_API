@@ -1,20 +1,6 @@
-import pytest
-from app import create_app, db
-from app.config import TestingConfig
-
-
-@pytest.fixture
-def client():
-    """Create a test client with a separate test database."""
-    app = create_app(TestingConfig)
-    with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-            yield client
-            db.drop_all()
-
 def test_register(client):
-    """Test register"""
+    """Test the user registration endpoint."""
+    # Test successful registration
     response = client.post('/register', json={
         'username': 'testuser',
         'email': 'test@gmail.com',
@@ -24,7 +10,7 @@ def test_register(client):
     assert 'User registered successfully' in response.json['message']
     assert response.json['data']['username'] == 'testuser'
 
-    # Test register with existing username
+    # Test registration with an existing username
     response = client.post('/register', json={
         'username': 'testuser',
         'email': 'test1@gmail.com',
@@ -33,7 +19,7 @@ def test_register(client):
     assert response.status_code == 400
     assert 'The username is already taken. Please choose another.' in response.json['message']
 
-    # Test register with existing email
+    # Test registration with an existing email
     response = client.post('/register', json={
         'username': 'testuser1',
         'email': 'test@gmail.com',
@@ -44,7 +30,8 @@ def test_register(client):
 
 
 def test_login(client):
-    """Test login"""
+    """Test the user login endpoint."""
+    # Register a user for login tests
     client.post('/register', json={
         'username': 'testuser',
         'email': 'test@gmail.com',
@@ -60,7 +47,7 @@ def test_login(client):
     assert 'User logged in successfully' in response.json['message']
     assert 'access_token' in response.json
 
-    # Test invalid email
+    # Test login with an invalid email
     response = client.post('/login', json={
         'email': 'wrong@gmail.com',
         'password': 'test_password'
@@ -68,18 +55,18 @@ def test_login(client):
     assert response.status_code == 401
     assert 'Invalid email or password' in response.json['message']
 
-    # Test invalid password
+    # Test login with an invalid password
     response = client.post('/login', json={
         'email': 'test@gmail.com',
         'password': 'wrongpassword'
     })
     assert response.status_code == 401
-    assert 'Invalid email or password' in response.json['message']    
+    assert 'Invalid email or password' in response.json['message']
 
 
 def test_logout(client):
-    """Test logout"""
-    # Create a user and login
+    """Test the user logout endpoint."""
+    # Register and log in a user
     client.post('/register', json={
         'username': 'testuser',
         'email': 'test@example.com',
@@ -91,7 +78,7 @@ def test_logout(client):
     })
     access_token = login_response.json['access_token']
 
-    # Test logout with valid token
+    # Test logout with a valid token
     response = client.post('/logout', headers={
         'Authorization': f'Bearer {access_token}'
     })
