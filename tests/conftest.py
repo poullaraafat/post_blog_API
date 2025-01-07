@@ -2,6 +2,8 @@ import pytest
 from app import create_app, db
 from app.config import TestingConfig
 
+# Global fixtures
+
 @pytest.fixture
 def client():
     """Create a test client with a separate test database."""
