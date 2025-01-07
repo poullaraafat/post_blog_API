@@ -10,7 +10,6 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    post_picture = db.Column(db.String(20), default=None)
 
     # One-to-many relationship: each post has many comments
     comments = db.relationship('Comment', backref='post', lazy=True, cascade="all, delete-orphan")
